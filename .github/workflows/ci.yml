@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - entrega-intermediaria
+
+  pull_request:
+    branches:
+      - main
+      - entrega-intermediaria
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install project dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install Ruff and Pytest
+        run: pip install ruff pytest
+
+      - name: Run Ruff
+        run: python -m ruff check app tests
+
+      - name: Run Pytest
+        run: pytest tests -v

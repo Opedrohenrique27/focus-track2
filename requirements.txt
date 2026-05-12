@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+pydantic-settings
+httpx
+python-dotenv
+# Dependências de teste e linting (opcionais no deploy, mas pode manter)
+ruff
+pytest
+pytest-asyncio

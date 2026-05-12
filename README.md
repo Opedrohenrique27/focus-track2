@@ -1,323 +1,384 @@
-# Focus Track API
+# 🎯 Focus Track
 
-Sistema de gerenciamento de tarefas desenvolvido com FastAPI, seguindo uma arquitetura backend moderna inspirada no projeto FinTrack.
+> Sistema fullstack de gerenciamento de tarefas e produtividade pessoal.
 
----
-
-# Problema
-
-Muitas pessoas enfrentam dificuldades para organizar tarefas, controlar produtividade e acompanhar o tempo gasto em atividades importantes.
-
-Além disso, sistemas simples de lista de tarefas normalmente possuem:
-
-* pouca escalabilidade
-* baixa organização de código
-* ausência de API
-* dificuldade de integração com aplicações web/mobile
+![Version](https://img.shields.io/badge/version-1.0.0-6c63ff?style=flat-square)
+![Python](https://img.shields.io/badge/python-3.11+-3776ab?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-13%20passed-34d399?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-fbbf24?style=flat-square)
 
 ---
 
-# Solução
+## 📌 O Problema
 
-O Focus Track API foi desenvolvido para fornecer uma solução moderna de gerenciamento de tarefas utilizando arquitetura backend profissional.
+Estudantes e profissionais frequentemente enfrentam dificuldades para organizar suas tarefas diárias, perder o controle do tempo e manter a motivação ao longo do dia. A falta de uma ferramenta simples, rápida e focada resulta em procrastinação, sobrecarga mental e baixa produtividade.
 
-O sistema permite:
+## 💡 A Solução
 
-* criar tarefas
-* acompanhar tempo estimado
-* concluir tarefas
-* atualizar tarefas
-* remover tarefas
-* calcular métricas de produtividade
-
-Além disso, a aplicação foi construída utilizando FastAPI e SQLite, permitindo futura integração com frontend React e deploy em nuvem.
+O **Focus Track** é um sistema web fullstack que centraliza o gerenciamento de tarefas em uma interface limpa e responsiva. Com ele, o usuário pode criar, acompanhar e concluir tarefas, visualizar seu progresso em tempo real e receber frases motivacionais para manter o foco.
 
 ---
 
-# Público-Alvo
+## ✨ Funcionalidades
 
-* Estudantes
-* Desenvolvedores
-* Profissionais
-* Usuários que desejam melhorar produtividade
-* Pessoas interessadas em organização pessoal
-
----
-
-# Funcionalidades
-
-* Criar tarefas
-* Listar tarefas
-* Buscar tarefa por ID
-* Atualizar tarefas
-* Concluir tarefas
-* Remover tarefas
-* Calcular tempo total
-* Persistência em banco de dados SQLite
-* API RESTful
-* Documentação automática Swagger
-* Validação de dados com Pydantic
+- ✅ **CRUD completo de tarefas** — criar, listar, editar, concluir e excluir
+- 📊 **Dashboard** — total de tarefas, concluídas, pendentes e tempo estimado
+- 📈 **Barra de progresso** — visualização do percentual de conclusão
+- 💬 **Frases motivacionais** — integração com a API pública ZenQuotes
+- 🔍 **Filtros** — visualizar todas, pendentes ou concluídas
+- 📱 **Responsivo** — funciona em desktop e mobile
+- 📝 **Documentação automática** — Swagger UI em `/docs`
 
 ---
 
-# Tecnologias Utilizadas
+## 🛠️ Tecnologias
 
-* Python 3.12+
-* FastAPI
-* SQLAlchemy
-* SQLite
-* Pydantic
-* Alembic
-* Uvicorn
-* Pytest
-* Git e GitHub
+### Backend
+| Tecnologia | Versão | Uso |
+|---|---|---|
+| Python | 3.11+ | Linguagem principal |
+| FastAPI | 0.111 | Framework web |
+| SQLAlchemy | 2.0 | ORM |
+| SQLite | — | Banco de dados |
+| Pydantic | 2.7 | Validação de dados |
+| Uvicorn | 0.29 | Servidor ASGI |
+| Httpx | 0.27 | Cliente HTTP async |
+
+### Frontend
+| Tecnologia | Uso |
+|---|---|
+| HTML5 | Estrutura |
+| CSS3 | Estilização (sem frameworks) |
+| JavaScript puro (ES6+) | Lógica e integração com API |
+
+### Qualidade & DevOps
+| Ferramenta | Uso |
+|---|---|
+| Pytest | Testes automatizados |
+| Ruff | Linting |
+| GitHub Actions | CI/CD pipeline |
 
 ---
 
-# Estrutura do Projeto
+## 🏗️ Arquitetura
 
-```plaintext
+O projeto segue os princípios da **Clean Architecture**, com separação clara de responsabilidades:
+
+```
 focus-track/
-│
 ├── app/
 │   ├── api/
-│   │   ├── routes/
-│   │   └── dependencies/
-│   │
+│   │   └── routes/          # Endpoints HTTP (controllers)
+│   │       ├── tasks.py
+│   │       └── quotes.py
 │   ├── core/
-│   │   ├── config/
-│   │   ├── security/
-│   │   └── exceptions/
-│   │
-│   ├── database/
-│   │   ├── connection.py
-│   │   └── base.py
-│   │
-│   ├── models/
-│   ├── repositories/
-│   ├── schemas/
-│   ├── services/
-│   ├── middlewares/
+│   │   ├── config/          # Configurações da aplicação
+│   │   │   └── settings.py
+│   │   └── database/        # Conexão e sessão do banco
+│   │       └── connection.py
+│   ├── models/              # Modelos ORM (entidades do banco)
+│   │   └── task.py
+│   ├── repositories/        # Acesso a dados (CRUD)
+│   │   └── task_repository.py
+│   ├── schemas/             # Schemas Pydantic (DTOs)
+│   │   ├── task.py
+│   │   └── quote.py
+│   ├── services/            # Regras de negócio
+│   │   ├── task_service.py
+│   │   └── quote_service.py
 │   ├── utils/
-│   │
-│   └── main.py
+│   │   └── logging.py       # Configuração de logs
+│   └── main.py              # Entry point da aplicação
 │
-├── alembic/
+├── frontend/
+│   ├── index.html
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── api.js           # Camada de comunicação com a API
+│   │   ├── tasks.js         # Lógica de tarefas
+│   │   ├── quotes.js        # Lógica de frases
+│   │   └── app.js           # Inicialização e eventos globais
+│   └── assets/
+│
 ├── tests/
-├── .env
-├── .env.example
+│   ├── conftest.py
+│   ├── test_tasks.py
+│   └── test_quotes.py
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
 ├── requirements.txt
+├── ruff.toml
+├── .env.example
 ├── .gitignore
+├── LICENSE
+├── VERSION
 └── README.md
 ```
 
----
+### Fluxo de dados
 
-# Endpoints
-
-## Criar tarefa
-
-```http
-POST /tasks
 ```
-
-## Listar tarefas
-
-```http
-GET /tasks
-```
-
-## Buscar tarefa por ID
-
-```http
-GET /tasks/{id}
-```
-
-## Atualizar tarefa
-
-```http
-PUT /tasks/{id}
-```
-
-## Concluir tarefa
-
-```http
-PATCH /tasks/{id}/complete
-```
-
-## Deletar tarefa
-
-```http
-DELETE /tasks/{id}
-```
-
-## Tempo total das tarefas
-
-```http
-GET /tasks/metrics/total-time
+HTTP Request
+    │
+    ▼
+ Router (api/routes)
+    │
+    ▼
+ Service (regras de negócio)
+    │
+    ▼
+ Repository (acesso ao banco)
+    │
+    ▼
+ Model (SQLAlchemy ORM)
+    │
+    ▼
+ SQLite Database
 ```
 
 ---
 
-# Exemplo de Request
+## 🚀 Instalação e Execução
 
-```json
-{
-  "titulo": "Estudar FastAPI",
-  "descricao": "Aprender arquitetura backend",
-  "tempo_estimado": 120
-}
-```
+### Pré-requisitos
 
----
+- Python 3.11 ou superior
+- pip
 
-# Exemplo de Response
-
-```json
-{
-  "id": 1,
-  "titulo": "Estudar FastAPI",
-  "descricao": "Aprender arquitetura backend",
-  "tempo_estimado": 120,
-  "concluida": false,
-  "data_criacao": "2026-05-11T14:00:00"
-}
-```
-
----
-
-# Como executar o projeto
-
-## 1. Clone o repositório
+### 1. Clone o repositório
 
 ```bash
 git clone https://github.com/seu-usuario/focus-track.git
-```
-
----
-
-## 2. Entre na pasta
-
-```bash
 cd focus-track
 ```
 
----
-
-## 3. Crie o ambiente virtual
-
-### Windows
+### 2. Crie e ative o ambiente virtual
 
 ```bash
+# Linux / macOS
+python -m venv venv
+source venv/bin/activate
+
+# Windows
 python -m venv venv
 venv\Scripts\activate
 ```
 
-### Linux / MacOS
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
----
-
-## 4. Instale as dependências
+### 3. Instale as dependências
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## 5. Configure o arquivo .env
-
-```env
-DATABASE_URL=sqlite:///./focus_track.db
-SECRET_KEY=sua_chave_secreta
-DEBUG=True
-```
-
----
-
-## 6. Execute o servidor
+### 4. Configure as variáveis de ambiente
 
 ```bash
-uvicorn app.main:app --reload
-```
-
-Servidor disponível em:
-
-```plaintext
-http://127.0.0.1:8000
+cp .env.example .env
+# Edite o .env se necessário
 ```
 
 ---
 
-# Documentação da API
+## ▶️ Executando o projeto
 
-## Swagger
-
-```plaintext
-http://127.0.0.1:8000/docs
-```
-
-## ReDoc
-
-```plaintext
-http://127.0.0.1:8000/redoc
-```
-
----
-
-# Banco de Dados
-
-O projeto utiliza SQLite como banco de dados principal utilizando SQLAlchemy ORM.
-
-As migrations são gerenciadas com Alembic.
-
----
-
-# Executando Migrations
-
-## Criar migration
+### Backend
 
 ```bash
-alembic revision --autogenerate -m "create tasks table"
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## Aplicar migration
+O servidor estará disponível em: **http://localhost:8000**
+
+### Frontend
+
+O frontend é servido automaticamente pelo FastAPI como arquivos estáticos.
+Acesse **http://localhost:8000** para usar a aplicação completa.
+
+> 💡 Para desenvolvimento frontend separado, abra `frontend/index.html` diretamente no navegador e altere `API_BASE` em `js/api.js` para `http://localhost:8000/api/v1`.
+
+### Documentação da API (Swagger)
+
+Acesse **http://localhost:8000/docs** para a documentação interativa.
+
+---
+
+## 🧪 Testes
+
+### Executar todos os testes
 
 ```bash
-alembic upgrade head
+pytest tests/ -v
 ```
 
----
-
-# Executando Testes
+### Executar com cobertura
 
 ```bash
-pytest
+pytest tests/ -v --tb=short
+```
+
+### Resultado esperado
+
+```
+tests/test_quotes.py::test_get_random_quote_fallback PASSED
+tests/test_quotes.py::test_get_random_quote_structure PASSED
+tests/test_quotes.py::test_health_check PASSED
+tests/test_tasks.py::test_create_task PASSED
+tests/test_tasks.py::test_list_tasks PASSED
+tests/test_tasks.py::test_get_task PASSED
+tests/test_tasks.py::test_update_task PASSED
+tests/test_tasks.py::test_complete_task PASSED
+tests/test_tasks.py::test_delete_task PASSED
+tests/test_tasks.py::test_task_not_found PASSED
+tests/test_tasks.py::test_invalid_task_empty_title PASSED
+tests/test_tasks.py::test_invalid_task_blank_title PASSED
+tests/test_tasks.py::test_task_stats PASSED
+
+13 passed
 ```
 
 ---
 
-# Melhorias Futuras
+## 🔍 Lint
 
-* Autenticação JWT
-* Sistema de usuários
-* Frontend React
-* Docker
-* PostgreSQL
-* Deploy em nuvem
-* Logs estruturados
-* CI/CD
-* Testes automatizados completos
+### Verificar código
+
+```bash
+ruff check app/ tests/
+```
+
+### Corrigir automaticamente
+
+```bash
+ruff check app/ tests/ --fix
+```
 
 ---
 
-# Autor
+## 📡 Endpoints da API
 
-Marcos André Camargo Belo
+### Tarefas
 
-Desenvolvedor Backend | Python | FastAPI | APIs RESTful
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `POST` | `/api/v1/tasks/` | Criar tarefa |
+| `GET` | `/api/v1/tasks/` | Listar todas as tarefas |
+| `GET` | `/api/v1/tasks/stats` | Estatísticas do dashboard |
+| `GET` | `/api/v1/tasks/{id}` | Buscar tarefa por ID |
+| `PUT` | `/api/v1/tasks/{id}` | Atualizar tarefa |
+| `PATCH` | `/api/v1/tasks/{id}/complete` | Marcar como concluída |
+| `DELETE` | `/api/v1/tasks/{id}` | Deletar tarefa |
+
+### Frases
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/api/v1/quotes/random` | Frase motivacional aleatória |
+
+### Sistema
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| `GET` | `/health` | Health check |
+| `GET` | `/docs` | Swagger UI |
+| `GET` | `/redoc` | ReDoc |
+
+### Exemplos de payload
+
+**Criar tarefa:**
+```json
+POST /api/v1/tasks/
+{
+  "title": "Estudar FastAPI",
+  "description": "Capítulos 3 e 4 da documentação oficial",
+  "estimated_time": 90
+}
+```
+
+**Resposta:**
+```json
+{
+  "id": 1,
+  "title": "Estudar FastAPI",
+  "description": "Capítulos 3 e 4 da documentação oficial",
+  "estimated_time": 90,
+  "completed": false,
+  "created_at": "2025-01-15T10:30:00"
+}
+```
+
+**Stats:**
+```json
+GET /api/v1/tasks/stats
+{
+  "total": 5,
+  "completed": 2,
+  "pending": 3,
+  "total_estimated_time": 240,
+  "completion_rate": 40.0
+}
+```
+
+---
+
+## ⚙️ CI/CD — GitHub Actions
+
+O pipeline executa automaticamente em `push` e `pull_request`:
+
+```
+1. Checkout do código
+2. Setup Python 3.11
+3. Instalação de dependências
+4. Ruff lint
+5. Pytest (13 testes)
+```
+
+Arquivo: `.github/workflows/ci.yml`
+
+---
+
+## 🌐 Deploy no Render
+
+### Passo a passo
+
+1. Faça push do projeto para o GitHub
+2. Acesse [render.com](https://render.com) e crie uma conta
+3. Clique em **New → Web Service**
+4. Conecte seu repositório GitHub
+5. Configure:
+
+| Campo | Valor |
+|---|---|
+| **Environment** | Python |
+| **Build Command** | `pip install -r requirements.txt` |
+| **Start Command** | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
+
+6. Adicione as variáveis de ambiente:
+   - `DATABASE_URL=sqlite:///./focus_track.db`
+   - `DEBUG=false`
+
+7. Clique em **Deploy**
+
+> 🔗 Link do deploy: _adicione após fazer o deploy_
+
+---
+
+## 👤 Autor
+
+Desenvolvido para o Bootcamp de Engenharia de Software / Desenvolvimento Fullstack.
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 📌 Versão
+
+`1.0.0` — Veja o arquivo [VERSION](VERSION).
